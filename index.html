@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Angelito.💕</title>
+  <title>My Love. 💕</title>
   <style>
     * {
       box-sizing: border-box;
@@ -18,6 +18,55 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #050508;
       color: #ffffff;
+    }
+
+    /* Pantalla Inicial de Entrada */
+    #welcomeScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #050508;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .welcome-title {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255, 117, 140, 0.4);
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
+      color: #4a1525;
+      border: none;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 182, 193, 0.6);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
+      50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(255, 182, 193, 0.9); }
+      100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
+    }
+
+    .start-btn:hover {
+      transform: scale(1.1);
     }
 
     #canvas-container {
@@ -44,6 +93,14 @@
       width: 100%;
       height: 100%;
       padding: 20px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .main-container.show {
+      opacity: 1;
+      transform: scale(1);
     }
 
     .card {
@@ -59,7 +116,6 @@
       flex-direction: row;
       align-items: center;
       gap: 30px;
-      transition: all 0.4s ease;
     }
 
     @media (max-width: 768px) {
@@ -108,34 +164,24 @@
     }
 
     .btn {
-      background: linear-gradient(135deg, #ff4b1f 0%, #ff9068 100%);
-      color: white;
+      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
+      color: #4a1525;
       border: none;
       padding: 12px 24px;
       border-radius: 50px;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255, 75, 31, 0.3);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
     .btn:hover {
       transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 7px 20px rgba(255, 117, 140, 0.5);
-    }
-
-    .btn:active {
-      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 7px 20px rgba(255, 182, 193, 0.6);
     }
 
     .gif-side {
@@ -170,25 +216,27 @@
 </head>
 <body>
 
+  <!-- Pantalla de Bienvenida -->
+  <div id="welcomeScreen">
+    <button class="start-btn" id="startBtn">Click ✨</button>
+  </div>
+
   <div id="canvas-container">
     <canvas id="heartCanvas"></canvas>
   </div>
 
-  <main class="main-container">
+  <main class="main-container" id="mainContent">
     <div class="card">
       <div class="content-side">
-        <h1 class="title">Para Ángel ❤️</h1>
+        <h1 class="title">Mi Angelito.💗</h1>
         
         <div class="phrase-box">
-          <p class="phrase" id="phraseText">Mi Angelito lindo, te amo. 💕</p>
+          <p class="phrase">Mi Angelito lindo, te amo. 💕</p>
         </div>
 
         <div class="buttons-group">
           <button class="btn" id="moreHeartsBtn">
-            <span> Click. ✨</span>
-          </button>
-          <button class="btn btn-secondary" id="musicBtn">
-            <span>🎵 Reproducir Música</span>
+            <span>Click!💖</span>
           </button>
         </div>
       </div>
@@ -201,120 +249,17 @@
     </div>
   </main>
 
+  <!-- Audio sin controles manuales -->
   <audio id="bgMusic" src="cancionn.mp3" loop></audio>
 
   <script>
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const startBtn = document.getElementById('startBtn');
+    const mainContent = document.getElementById('mainContent');
     const moreHeartsBtn = document.getElementById('moreHeartsBtn');
-    const musicBtn = document.getElementById('musicBtn');
     const bgMusic = document.getElementById('bgMusic');
 
-    // Control del Reproductor de Música (para musica.mp3 en GitHub)
-    musicBtn.addEventListener('click', () => {
-      if (bgMusic.paused) {
-        bgMusic.play().then(() => {
-          musicBtn.textContent = '⏸️ Pausar Música';
-        }).catch(err => {
-          console.log("Asegúrate de subir musica.mp3 a GitHub:", err);
-          alert("Sube tu archivo 'musica.mp3' a la misma carpeta en GitHub para que suene la canción.");
-        });
-      } else {
-        bgMusic.pause();
-        musicBtn.textContent = '🎵 Reproducir Música';
-      }
-    });
-
-    // Sistema de Lluvia de Corazones en Canvas 2D
-    const canvas = document.getElementById('heartCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
-    class Heart {
-      constructor(customX, customY, customSpeed) {
-        this.reset(customX, customY, customSpeed);
-      }
-
-      reset(customX, customY, customSpeed) {
-        this.x = customX !== undefined ? customX : Math.random() * width;
-        this.y = customY !== undefined ? customY : height + 20 + Math.random() * 50;
-        this.size = Math.random() * 18 + 10;
-        this.speedY = customSpeed || (Math.random() * 1.5 + 0.8);
-        this.speedX = (Math.random() - 0.5) * 0.8;
-        this.opacity = Math.random() * 0.7 + 0.3;
-        this.colorHue = Math.floor(Math.random() * 40) + 330;
-        this.swingSpeed = Math.random() * 0.03 + 0.01;
-        this.swingAngle = Math.random() * Math.PI * 2;
-      }
-
-      update() {
-        this.y -= this.speedY;
-        this.swingAngle += this.swingSpeed;
-        this.x += Math.sin(this.swingAngle) * 0.6 + this.speedX;
-
-        if (this.y < -30) {
-          this.reset();
-        }
-      }
-
-      draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${this.opacity})`;
-        ctx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.5)`;
-        ctx.shadowBlur = 8;
-        
-        ctx.beginPath();
-        const topCurveHeight = this.size * 0.3;
-        ctx.moveTo(0, topCurveHeight);
-        ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurveHeight);
-        ctx.bezierCurveTo(-this.size / 2, (this.size + topCurveHeight) / 2, 0, this.size, 0, this.size);
-        ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurveHeight) / 2, this.size / 2, topCurveHeight);
-        ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurveHeight);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    const hearts = [];
-    const heartCount = 65;
-
-    for (let i = 0; i < heartCount; i++) {
-      hearts.push(new Heart(Math.random() * width, Math.random() * height));
-    }
-
-    function spawnHeartBurst(count) {
-      for (let i = 0; i < count; i++) {
-        hearts.push(new Heart(Math.random() * width, height + 10, Math.random() * 3 + 2));
-      }
-      if (hearts.length > 120) {
-        hearts.splice(0, count);
-      }
-    }
-
-    moreHeartsBtn.addEventListener('click', () => {
-      spawnHeartBurst(25);
-    });
-
-    function animate() {
-      ctx.fillStyle = '#050508';
-      ctx.fillRect(0, 0, width, height);
-
-      hearts.forEach(heart => {
-        heart.update();
-        heart.draw();
-      });
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-  </script>
-</body>
-</html>
+    // Reproduce la música al presionar Click en la pantalla inicial
+    startBtn.addEventListener('click', () => {
+      bgMusic.play().catch(err => {
+        console
