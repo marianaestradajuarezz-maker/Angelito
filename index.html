@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Love. ❤️</title>
+  <title>My Love. 💕</title>
   <style>
     * {
       box-sizing: border-box;
@@ -69,13 +69,26 @@
       transform: scale(1.1);
     }
 
-    #canvas-container {
+    /* Fondo de Corazones (Detrás de todo) */
+    #heartsCanvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 5;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Capa de Brillitos (Por encima de la tarjeta) */
+    #sparklesCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20;
+      pointer-events: none;
     }
 
     canvas {
@@ -116,271 +129,6 @@
       flex-direction: row;
       align-items: center;
       gap: 30px;
-      transition: opacity 0.5s ease;
-    }
-
-    /* Cuando los corazones tapan la pantalla, la tarjeta se oculta suavemente */
-    .card.hidden-by-hearts {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    @media (max-width: 768px) {
-      .card {
-        flex-direction: column-reverse;
-        padding: 25px;
-        max-height: 90vh;
-        overflow-y: auto;
-      }
-    }
-
-    .content-side {
-      flex: 1.2;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(255, 117, 140, 0.3);
-    }
-
-    .phrase-box {
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-    }
-
-    .phrase {
-      font-size: 1.25rem;
-      line-height: 1.6;
-      color: #f0f0f0;
-      font-style: italic;
-    }
-
-    .buttons-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .btn {
-      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
-      color: #4a1525;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      border: 1px solid rgba(255, 182, 193, 0.5);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
-    }
-
-    .btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 7px 20px rgba(255, 182, 193, 0.6);
-    }
-
-    /* Botón flotante de reiniciar cuando la pantalla está cubierta */
-    #floatingResetBtn {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%) scale(0);
-      z-index: 50;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-      color: #ffffff;
-      border: 2px solid #ffffff;
-      padding: 16px 36px;
-      font-size: 1.1rem;
-      border-radius: 50px;
-      box-shadow: 0 0 30px rgba(255, 117, 140, 0.8);
-      cursor: pointer;
-    }
-
-    #floatingResetBtn.visible {
-      transform: translateX(-50%) scale(1);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .gif-side {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-
-    .gif-container {
-      width: 100%;
-      max-width: 320px;
-      border-radius: 20px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .gif-container img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      display: block;
-      object-fit: cover;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Pantalla de Bienvenida -->
-  <div id="welcomeScreen">
-    <h2 class="welcome-title">...❤️...</h2>
-    <button class="start-btn" id="startBtn">Click!✨</button>
-  </div>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para Ángel ❤️</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #050508;
-      color: #ffffff;
-    }
-
-    /* Pantalla Inicial de Entrada */
-    #welcomeScreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #050508;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-
-    .welcome-title {
-      font-size: 2rem;
-      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(255, 117, 140, 0.4);
-    }
-
-    .start-btn {
-      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
-      color: #4a1525;
-      border: none;
-      padding: 16px 40px;
-      border-radius: 50px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 0 25px rgba(255, 182, 193, 0.6);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
-      50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(255, 182, 193, 0.9); }
-      100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
-    }
-
-    .start-btn:hover {
-      transform: scale(1.1);
-    }
-
-    #canvas-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 5;
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .main-container {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      padding: 20px;
-      opacity: 0;
-      transform: scale(0.95);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .main-container.show {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .card {
-      background: rgba(18, 18, 26, 0.85);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 105, 180, 0.3);
-      box-shadow: 0 0 30px rgba(255, 105, 180, 0.2), inset 0 0 15px rgba(255, 105, 180, 0.1);
-      border-radius: 24px;
-      padding: 40px;
-      max-width: 850px;
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 30px;
-      transition: opacity 0.5s ease;
     }
 
     @media (max-width: 768px) {
@@ -483,18 +231,17 @@
 
   <!-- Pantalla de Bienvenida -->
   <div id="welcomeScreen">
-    <h2 class="welcome-title">...❤️...</h2>
-    <button class="start-btn" id="startBtn">Click! 💕</button>
+    <h2 class="welcome-title">...💗...</h2>
+    <button class="start-btn" id="startBtn">Click ✨</button>
   </div>
 
-  <div id="canvas-container">
-    <canvas id="heartCanvas"></canvas>
-  </div>
+  <!-- Capa 1: Fondo de Corazones (detrás) -->
+  <canvas id="heartsCanvas"></canvas>
 
   <main class="main-container" id="mainContent">
     <div class="card">
       <div class="content-side">
-        <h1 class="title">💗💗💗</h1>
+        <h1 class="title">❤️❤️❤️</h1>
         
         <div class="phrase-box">
           <p class="phrase">Mi Angelito lindo, te amo. 💕</p>
@@ -515,7 +262,10 @@
     </div>
   </main>
 
-  <!-- Apuntando al nombre exacto de tu archivo en GitHub: cancionn.mp3 -->
+  <!-- Capa 2: Lluvia de Brillitos (cayendo SOBRE la tarjeta) -->
+  <canvas id="sparklesCanvas"></canvas>
+
+  <!-- Canción sincronizada con cancionn.mp3 -->
   <audio id="bgMusic" src="cancionn.mp3" loop preload="auto"></audio>
 
   <script>
@@ -540,35 +290,47 @@
         }
       }
 
-      if (startBtn) {
-        startBtn.addEventListener('click', () => {
-          playAudio();
+      function handleStart(e) {
+        if (e) e.preventDefault();
+        playAudio();
 
-          if (welcomeScreen) {
-            welcomeScreen.style.opacity = '0';
-            welcomeScreen.style.visibility = 'hidden';
-          }
-          
-          setTimeout(() => {
-            if (mainContent) mainContent.classList.add('show');
-          }, 300);
-        });
+        if (welcomeScreen) {
+          welcomeScreen.style.opacity = '0';
+          welcomeScreen.style.visibility = 'hidden';
+        }
+        
+        setTimeout(() => {
+          if (mainContent) mainContent.classList.add('show');
+        }, 300);
       }
 
-      // Canvas & Animación de Corazones y Brillitos
-      const canvas = document.getElementById('heartCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
+      if (startBtn) {
+        startBtn.addEventListener('click', handleStart);
+        startBtn.addEventListener('touchstart', handleStart, { passive: false });
+      }
 
-      let width = canvas.width = window.innerWidth;
-      let height = canvas.height = window.innerHeight;
+      // --- CANVAS 1: CORAZONES (FONDO) ---
+      const hCanvas = document.getElementById('heartsCanvas');
+      const hCtx = hCanvas.getContext('2d');
 
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
+      // --- CANVAS 2: BRILLITOS (POR ENCIMA) ---
+      const sCanvas = document.getElementById('sparklesCanvas');
+      const sCtx = sCanvas.getContext('2d');
 
-      // Clase Corazón Flotante (Lluvia constante)
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+
+      function resizeCanvases() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        hCanvas.width = sCanvas.width = width;
+        hCanvas.height = sCanvas.height = height;
+      }
+
+      resizeCanvases();
+      window.addEventListener('resize', resizeCanvases);
+
+      // Clase Corazón Flotante (Lluvia de Fondo)
       class Heart {
         constructor(customX, customY) {
           this.size = Math.random() * 18 + 10;
@@ -597,28 +359,28 @@
         }
 
         draw() {
-          ctx.save();
-          ctx.translate(this.x, this.y);
+          hCtx.save();
+          hCtx.translate(this.x, this.y);
           
-          ctx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${this.opacity})`;
-          ctx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.6)`;
-          ctx.shadowBlur = 8;
+          hCtx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${this.opacity})`;
+          hCtx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.6)`;
+          hCtx.shadowBlur = 8;
           
-          ctx.beginPath();
+          hCtx.beginPath();
           const size = this.size;
           const topCurveHeight = size * 0.3;
-          ctx.moveTo(0, topCurveHeight);
-          ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
-          ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
-          ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
-          ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
+          hCtx.moveTo(0, topCurveHeight);
+          hCtx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+          hCtx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+          hCtx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+          hCtx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+          hCtx.closePath();
+          hCtx.fill();
+          hCtx.restore();
         }
       }
 
-      // Clase Brillitos (Estrellitas cayendo)
+      // Clase Brillitos (Caen sobre el contenido)
       class Sparkle {
         constructor() {
           this.reset();
@@ -626,13 +388,13 @@
 
         reset() {
           this.x = Math.random() * width;
-          this.y = -20 - Math.random() * 50;
-          this.size = Math.random() * 6 + 3;
-          this.speedY = Math.random() * 2 + 1.2;
-          this.speedX = (Math.random() - 0.5) * 1.2;
+          this.y = -20 - Math.random() * 40;
+          this.size = Math.random() * 7 + 3;
+          this.speedY = Math.random() * 2.5 + 1.2;
+          this.speedX = (Math.random() - 0.5) * 1.5;
           this.opacity = Math.random() * 0.8 + 0.2;
           this.rotation = Math.random() * Math.PI;
-          this.rotationSpeed = (Math.random() - 0.5) * 0.08;
+          this.rotationSpeed = (Math.random() - 0.5) * 0.1;
           this.colorHue = Math.random() > 0.5 ? 45 : 320; 
         }
 
@@ -640,36 +402,32 @@
           this.y += this.speedY;
           this.x += this.speedX;
           this.rotation += this.rotationSpeed;
-
-          if (this.y > height + 20) {
-            this.opacity -= 0.01;
-          }
         }
 
         draw() {
           if (this.opacity <= 0) return;
-          ctx.save();
-          ctx.translate(this.x, this.y);
-          ctx.rotate(this.rotation);
+          sCtx.save();
+          sCtx.translate(this.x, this.y);
+          sCtx.rotate(this.rotation);
           
-          ctx.fillStyle = `hsla(${this.colorHue}, 100%, 75%, ${this.opacity})`;
-          ctx.shadowColor = `hsla(${this.colorHue}, 100%, 75%, 0.9)`;
-          ctx.shadowBlur = 10;
+          sCtx.fillStyle = `hsla(${this.colorHue}, 100%, 75%, ${this.opacity})`;
+          sCtx.shadowColor = `hsla(${this.colorHue}, 100%, 75%, 0.9)`;
+          sCtx.shadowBlur = 10;
           
-          ctx.beginPath();
+          sCtx.beginPath();
           for (let i = 0; i < 4; i++) {
-            ctx.lineTo(Math.cos((i * Math.PI) / 2) * this.size, Math.sin((i * Math.PI) / 2) * this.size);
-            ctx.lineTo(Math.cos(((i + 0.5) * Math.PI) / 2) * (this.size * 0.3), Math.sin(((i + 0.5) * Math.PI) / 2) * (this.size * 0.3));
+            sCtx.lineTo(Math.cos((i * Math.PI) / 2) * this.size, Math.sin((i * Math.PI) / 2) * this.size);
+            sCtx.lineTo(Math.cos(((i + 0.5) * Math.PI) / 2) * (this.size * 0.3), Math.sin(((i + 0.5) * Math.PI) / 2) * (this.size * 0.3));
           }
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
+          sCtx.closePath();
+          sCtx.fill();
+          sCtx.restore();
         }
       }
 
       const hearts = [];
       const sparkles = [];
-      const heartCount = 75;
+      const heartCount = 70;
 
       for (let i = 0; i < heartCount; i++) {
         hearts.push(new Heart(Math.random() * width, Math.random() * height));
@@ -682,226 +440,34 @@
       }
 
       if (sparklesBtn) {
-        sparklesBtn.addEventListener('click', () => {
-          spawnSparkles(35);
-        });
+        const triggerSparkles = (e) => {
+          if (e) e.preventDefault();
+          spawnSparkles(40);
+        };
+        sparklesBtn.addEventListener('click', triggerSparkles);
+        sparklesBtn.addEventListener('touchstart', triggerSparkles, { passive: false });
       }
 
       function animate() {
-        ctx.fillStyle = '#050508';
-        ctx.fillRect(0, 0, width, height);
+        // Limpiar fondo de corazones
+        hCtx.fillStyle = '#050508';
+        hCtx.fillRect(0, 0, width, height);
 
         hearts.forEach(heart => {
           heart.update();
           heart.draw();
         });
+
+        // Limpiar capa transparente de brillitos
+        sCtx.clearRect(0, 0, width, height);
 
         for (let i = sparkles.length - 1; i >= 0; i--) {
           sparkles[i].update();
           sparkles[i].draw();
-          if (sparkles[i].y > height + 30 || sparkles[i].opacity <= 0) {
+          if (sparkles[i].y > height + 30) {
             sparkles.splice(i, 1);
           }
         }
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    });
-  </script>
-</body>
-</html>
-  <div id="canvas-container">
-    <canvas id="heartCanvas"></canvas>
-  </div>
-
-  <main class="main-container" id="mainContent">
-    <div class="card">
-      <div class="content-side">
-        <h1 class="title"></h1>
-        
-        <div class="phrase-box">
-          <p class="phrase">Mi Angelito lindo, te amo. 💕</p>
-        </div>
-
-        <div class="buttons-group">
-          <button class="btn" id="growHeartsBtn">
-            <span>💖</span>
-          </button>
-          <button class="btn btn-secondary" id="resetBtn">
-            <span>💗</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="gif-side">
-        <div class="gif-container">
-          <img src="https://i.ibb.co/BV91Qf11/beso-ezgif-com-remove-background.gif" alt="Beso de Amor">
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Botón emergente superpuesto para reiniciar cuando los corazones cubren todo -->
-  <button id="floatingResetBtn">💗</button>
-
-  <audio id="bgMusic" src="cancionn.mp3" loop preload="auto"></audio>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const welcomeScreen = document.getElementById('welcomeScreen');
-      const startBtn = document.getElementById('startBtn');
-      const mainContent = document.getElementById('mainContent');
-      const mainCard = document.querySelector('.card');
-      const growHeartsBtn = document.getElementById('growHeartsBtn');
-      const resetBtn = document.getElementById('resetBtn');
-      const floatingResetBtn = document.getElementById('floatingResetBtn');
-      const bgMusic = document.getElementById('bgMusic');
-
-      // Manejo confiable de audio en bucle
-      if (bgMusic) {
-        bgMusic.loop = true;
-      }
-
-      function playAudio() {
-        if (bgMusic) {
-          bgMusic.play().then(() => {
-            console.log("Música reproduciéndose sin interrupciones.");
-          }).catch(err => {
-            console.log("Para escuchar la canción, recuerda tener el archivo musica.mp3 en tu repositorio.", err);
-          });
-        }
-      }
-
-      if (startBtn) {
-        startBtn.addEventListener('click', () => {
-          playAudio();
-
-          if (welcomeScreen) {
-            welcomeScreen.style.opacity = '0';
-            welcomeScreen.style.visibility = 'hidden';
-          }
-          
-          setTimeout(() => {
-            if (mainContent) mainContent.classList.add('show');
-          }, 300);
-        });
-      }
-
-      // Control de crecimiento extremo de corazones
-      let sizeMultiplier = 1;
-      const maxMultiplier = 25; // Tamaño colosal para cubrir toda la pantalla
-
-      function applyGrowth() {
-        sizeMultiplier += 5;
-        if (sizeMultiplier >= maxMultiplier) {
-          sizeMultiplier = maxMultiplier;
-          // Ocultar tarjeta y mostrar el botón superpuesto de reinicio
-          if (mainCard) mainCard.classList.add('hidden-by-hearts');
-          if (floatingResetBtn) floatingResetBtn.classList.add('visible');
-        }
-        hearts.forEach(heart => heart.grow(sizeMultiplier));
-      }
-
-      function resetHearts() {
-        sizeMultiplier = 1;
-        if (mainCard) mainCard.classList.remove('hidden-by-hearts');
-        if (floatingResetBtn) floatingResetBtn.classList.remove('visible');
-        hearts.forEach(heart => heart.resetSize());
-      }
-
-      if (growHeartsBtn) growHeartsBtn.addEventListener('click', applyGrowth);
-      if (resetBtn) resetBtn.addEventListener('click', resetHearts);
-      if (floatingResetBtn) floatingResetBtn.addEventListener('click', resetHearts);
-
-      // Canvas & Animación de Corazones
-      const canvas = document.getElementById('heartCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-
-      let width = canvas.width = window.innerWidth;
-      let height = canvas.height = window.innerHeight;
-
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      class Heart {
-        constructor(customX, customY) {
-          this.baseSize = Math.random() * 20 + 12;
-          this.currentSize = this.baseSize;
-          this.reset(customX, customY);
-        }
-
-        reset(customX, customY) {
-          this.x = customX !== undefined ? customX : Math.random() * width;
-          this.y = customY !== undefined ? customY : height + 30 + Math.random() * 50;
-          this.speedY = Math.random() * 1.5 + 0.8;
-          this.speedX = (Math.random() - 0.5) * 0.8;
-          this.opacity = Math.random() * 0.7 + 0.3;
-          this.colorHue = Math.floor(Math.random() * 40) + 330;
-          this.swingSpeed = Math.random() * 0.03 + 0.01;
-          this.swingAngle = Math.random() * Math.PI * 2;
-        }
-
-        grow(multiplier) {
-          this.currentSize = this.baseSize * multiplier;
-        }
-
-        resetSize() {
-          this.currentSize = this.baseSize;
-        }
-
-        update() {
-          this.y -= this.speedY;
-          this.swingAngle += this.swingSpeed;
-          this.x += Math.sin(this.swingAngle) * 0.6 + this.speedX;
-
-          if (this.y < -this.currentSize * 2) {
-            this.reset();
-          }
-        }
-
-        draw() {
-          ctx.save();
-          ctx.translate(this.x, this.y);
-          
-          const dynamicOpacity = sizeMultiplier > 5 ? Math.min(1, this.opacity + 0.3) : this.opacity;
-          ctx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${dynamicOpacity})`;
-          ctx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.6)`;
-          ctx.shadowBlur = sizeMultiplier > 5 ? 20 : 8;
-          
-          ctx.beginPath();
-          const size = this.currentSize;
-          const topCurveHeight = size * 0.3;
-          ctx.moveTo(0, topCurveHeight);
-          ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
-          ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
-          ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
-          ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-        }
-      }
-
-      const hearts = [];
-      const heartCount = 75;
-
-      for (let i = 0; i < heartCount; i++) {
-        hearts.push(new Heart(Math.random() * width, Math.random() * height));
-      }
-
-      function animate() {
-        ctx.fillStyle = '#050508';
-        ctx.fillRect(0, 0, width, height);
-
-        hearts.forEach(heart => {
-          heart.update();
-          heart.draw();
-        });
 
         requestAnimationFrame(animate);
       }
