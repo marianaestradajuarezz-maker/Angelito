@@ -259,8 +259,232 @@
 
   <!-- Pantalla de Bienvenida -->
   <div id="welcomeScreen">
-    <h2 class="welcome-title">... ❤️...</h2>
+    <h2 class="welcome-title">...❤️...</h2>
     <button class="start-btn" id="startBtn">Click!✨</button>
+  </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Ángel ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #050508;
+      color: #ffffff;
+    }
+
+    /* Pantalla Inicial de Entrada */
+    #welcomeScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #050508;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .welcome-title {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255, 117, 140, 0.4);
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
+      color: #4a1525;
+      border: none;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 182, 193, 0.6);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
+      50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(255, 182, 193, 0.9); }
+      100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 182, 193, 0.6); }
+    }
+
+    .start-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .main-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .main-container.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .card {
+      background: rgba(18, 18, 26, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 105, 180, 0.3);
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.2), inset 0 0 15px rgba(255, 105, 180, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 850px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 30px;
+      transition: opacity 0.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        flex-direction: column-reverse;
+        padding: 25px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    }
+
+    .content-side {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255, 117, 140, 0.3);
+    }
+
+    .phrase-box {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .phrase {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      color: #f0f0f0;
+      font-style: italic;
+    }
+
+    .buttons-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
+      color: #4a1525;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 7px 20px rgba(255, 182, 193, 0.6);
+    }
+
+    .gif-side {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .gif-container {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .gif-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      display: block;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de Bienvenida -->
+  <div id="welcomeScreen">
+    <h2 class="welcome-title">...❤️...</h2>
+    <button class="start-btn" id="startBtn">Click! 💕</button>
   </div>
 
   <div id="canvas-container">
@@ -270,7 +494,232 @@
   <main class="main-container" id="mainContent">
     <div class="card">
       <div class="content-side">
-        <h1 class="title">💘</h1>
+        <h1 class="title">💗💗💗</h1>
+        
+        <div class="phrase-box">
+          <p class="phrase">Mi Angelito lindo, te amo. 💕</p>
+        </div>
+
+        <div class="buttons-group">
+          <button class="btn" id="sparklesBtn">
+            <span>✨</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="gif-side">
+        <div class="gif-container">
+          <img src="https://i.ibb.co/BV91Qf11/beso-ezgif-com-remove-background.gif" alt="Beso de Amor">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Apuntando al nombre exacto de tu archivo en GitHub: cancionn.mp3 -->
+  <audio id="bgMusic" src="cancionn.mp3" loop preload="auto"></audio>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const startBtn = document.getElementById('startBtn');
+      const mainContent = document.getElementById('mainContent');
+      const sparklesBtn = document.getElementById('sparklesBtn');
+      const bgMusic = document.getElementById('bgMusic');
+
+      if (bgMusic) {
+        bgMusic.loop = true;
+      }
+
+      function playAudio() {
+        if (bgMusic) {
+          bgMusic.play().then(() => {
+            console.log("Música reproduciéndose sin interrupciones.");
+          }).catch(err => {
+            console.log("Error al reproducir cancionn.mp3:", err);
+          });
+        }
+      }
+
+      if (startBtn) {
+        startBtn.addEventListener('click', () => {
+          playAudio();
+
+          if (welcomeScreen) {
+            welcomeScreen.style.opacity = '0';
+            welcomeScreen.style.visibility = 'hidden';
+          }
+          
+          setTimeout(() => {
+            if (mainContent) mainContent.classList.add('show');
+          }, 300);
+        });
+      }
+
+      // Canvas & Animación de Corazones y Brillitos
+      const canvas = document.getElementById('heartCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      // Clase Corazón Flotante (Lluvia constante)
+      class Heart {
+        constructor(customX, customY) {
+          this.size = Math.random() * 18 + 10;
+          this.reset(customX, customY);
+        }
+
+        reset(customX, customY) {
+          this.x = customX !== undefined ? customX : Math.random() * width;
+          this.y = customY !== undefined ? customY : height + 30 + Math.random() * 50;
+          this.speedY = Math.random() * 1.5 + 0.8;
+          this.speedX = (Math.random() - 0.5) * 0.8;
+          this.opacity = Math.random() * 0.7 + 0.3;
+          this.colorHue = Math.floor(Math.random() * 40) + 330;
+          this.swingSpeed = Math.random() * 0.03 + 0.01;
+          this.swingAngle = Math.random() * Math.PI * 2;
+        }
+
+        update() {
+          this.y -= this.speedY;
+          this.swingAngle += this.swingSpeed;
+          this.x += Math.sin(this.swingAngle) * 0.6 + this.speedX;
+
+          if (this.y < -this.size * 2) {
+            this.reset();
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          
+          ctx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${this.opacity})`;
+          ctx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.6)`;
+          ctx.shadowBlur = 8;
+          
+          ctx.beginPath();
+          const size = this.size;
+          const topCurveHeight = size * 0.3;
+          ctx.moveTo(0, topCurveHeight);
+          ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+          ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+          ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+          ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // Clase Brillitos (Estrellitas cayendo)
+      class Sparkle {
+        constructor() {
+          this.reset();
+        }
+
+        reset() {
+          this.x = Math.random() * width;
+          this.y = -20 - Math.random() * 50;
+          this.size = Math.random() * 6 + 3;
+          this.speedY = Math.random() * 2 + 1.2;
+          this.speedX = (Math.random() - 0.5) * 1.2;
+          this.opacity = Math.random() * 0.8 + 0.2;
+          this.rotation = Math.random() * Math.PI;
+          this.rotationSpeed = (Math.random() - 0.5) * 0.08;
+          this.colorHue = Math.random() > 0.5 ? 45 : 320; 
+        }
+
+        update() {
+          this.y += this.speedY;
+          this.x += this.speedX;
+          this.rotation += this.rotationSpeed;
+
+          if (this.y > height + 20) {
+            this.opacity -= 0.01;
+          }
+        }
+
+        draw() {
+          if (this.opacity <= 0) return;
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.rotation);
+          
+          ctx.fillStyle = `hsla(${this.colorHue}, 100%, 75%, ${this.opacity})`;
+          ctx.shadowColor = `hsla(${this.colorHue}, 100%, 75%, 0.9)`;
+          ctx.shadowBlur = 10;
+          
+          ctx.beginPath();
+          for (let i = 0; i < 4; i++) {
+            ctx.lineTo(Math.cos((i * Math.PI) / 2) * this.size, Math.sin((i * Math.PI) / 2) * this.size);
+            ctx.lineTo(Math.cos(((i + 0.5) * Math.PI) / 2) * (this.size * 0.3), Math.sin(((i + 0.5) * Math.PI) / 2) * (this.size * 0.3));
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      const hearts = [];
+      const sparkles = [];
+      const heartCount = 75;
+
+      for (let i = 0; i < heartCount; i++) {
+        hearts.push(new Heart(Math.random() * width, Math.random() * height));
+      }
+
+      function spawnSparkles(count) {
+        for (let i = 0; i < count; i++) {
+          sparkles.push(new Sparkle());
+        }
+      }
+
+      if (sparklesBtn) {
+        sparklesBtn.addEventListener('click', () => {
+          spawnSparkles(35);
+        });
+      }
+
+      function animate() {
+        ctx.fillStyle = '#050508';
+        ctx.fillRect(0, 0, width, height);
+
+        hearts.forEach(heart => {
+          heart.update();
+          heart.draw();
+        });
+
+        for (let i = sparkles.length - 1; i >= 0; i--) {
+          sparkles[i].update();
+          sparkles[i].draw();
+          if (sparkles[i].y > height + 30 || sparkles[i].opacity <= 0) {
+            sparkles.splice(i, 1);
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    });
+  </script>
+</body>
+</html>
+  <div id="canvas-container">
+    <canvas id="heartCanvas"></canvas>
+  </div>
+
+  <main class="main-container" id="mainContent">
+    <div class="card">
+      <div class="content-side">
+        <h1 class="title"></h1>
         
         <div class="phrase-box">
           <p class="phrase">Mi Angelito lindo, te amo. 💕</p>
