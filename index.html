@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para Ángel ❤️</title>
+  <title>Para jjj❤️</title>
   <style>
     * {
       box-sizing: border-box;
@@ -75,7 +75,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: 5;
     }
 
     canvas {
@@ -104,8 +104,8 @@
     }
 
     .card {
-      background: rgba(18, 18, 26, 0.75);
-      backdrop-filter: blur(12px);
+      background: rgba(18, 18, 26, 0.85);
+      backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 105, 180, 0.3);
       box-shadow: 0 0 30px rgba(255, 105, 180, 0.2), inset 0 0 15px rgba(255, 105, 180, 0.1);
       border-radius: 24px;
@@ -116,6 +116,13 @@
       flex-direction: row;
       align-items: center;
       gap: 30px;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Cuando los corazones tapan la pantalla, la tarjeta se oculta suavemente */
+    .card.hidden-by-hearts {
+      opacity: 0;
+      pointer-events: none;
     }
 
     @media (max-width: 768px) {
@@ -180,15 +187,42 @@
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
       color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 182, 193, 0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
     }
 
     .btn:hover {
       transform: translateY(-3px) scale(1.03);
       box-shadow: 0 7px 20px rgba(255, 182, 193, 0.6);
+    }
+
+    /* Botón flotante de reiniciar cuando la pantalla está cubierta */
+    #floatingResetBtn {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      padding: 16px 36px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      box-shadow: 0 0 30px rgba(255, 117, 140, 0.8);
+      cursor: pointer;
+    }
+
+    #floatingResetBtn.visible {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .gif-side {
@@ -260,136 +294,171 @@
     </div>
   </main>
 
-  <audio id="bgMusic" src="musica.mp3" loop></audio>
+  <!-- Botón emergente superpuesto para reiniciar cuando los corazones cubren todo -->
+  <button id="floatingResetBtn">🔄 Reiniciar ✨</button>
+
+  <audio id="bgMusic" src="cancionn.mp3" loop preload="auto"></audio>
 
   <script>
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    const startBtn = document.getElementById('startBtn');
-    const mainContent = document.getElementById('mainContent');
-    const growHeartsBtn = document.getElementById('growHeartsBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const bgMusic = document.getElementById('bgMusic');
+    document.addEventListener('DOMContentLoaded', () => {
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const startBtn = document.getElementById('startBtn');
+      const mainContent = document.getElementById('mainContent');
+      const mainCard = document.querySelector('.card');
+      const growHeartsBtn = document.getElementById('growHeartsBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const floatingResetBtn = document.getElementById('floatingResetBtn');
+      const bgMusic = document.getElementById('bgMusic');
 
-    // Control de tamaño global para los corazones
-    let sizeMultiplier = 1;
-    const maxMultiplier = 8; // Límite para llenar toda la pantalla
-
-    startBtn.addEventListener('click', () => {
-      bgMusic.play().catch(err => {
-        console.log("No se encontró musica.mp3:", err);
-      });
-
-      welcomeScreen.style.opacity = '0';
-      welcomeScreen.style.visibility = 'hidden';
-      
-      setTimeout(() => {
-        mainContent.classList.add('show');
-      }, 300);
-    });
-
-    // Evento para hacer más grandes los corazones en cada clic
-    growHeartsBtn.addEventListener('click', () => {
-      if (sizeMultiplier < maxMultiplier) {
-        sizeMultiplier += 0.8;
-      }
-      hearts.forEach(heart => heart.grow(sizeMultiplier));
-    });
-
-    // Evento para reiniciar los corazones a su estado normal
-    resetBtn.addEventListener('click', () => {
-      sizeMultiplier = 1;
-      hearts.forEach(heart => heart.resetSize());
-    });
-
-    // Canvas & Animación de Corazones
-    const canvas = document.getElementById('heartCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
-    class Heart {
-      constructor(customX, customY) {
-        this.baseSize = Math.random() * 18 + 10;
-        this.currentSize = this.baseSize;
-        this.reset(customX, customY);
+      // Manejo confiable de audio en bucle
+      if (bgMusic) {
+        bgMusic.loop = true;
       }
 
-      reset(customX, customY) {
-        this.x = customX !== undefined ? customX : Math.random() * width;
-        this.y = customY !== undefined ? customY : height + 20 + Math.random() * 50;
-        this.speedY = Math.random() * 1.5 + 0.8;
-        this.speedX = (Math.random() - 0.5) * 0.8;
-        this.opacity = Math.random() * 0.7 + 0.3;
-        this.colorHue = Math.floor(Math.random() * 40) + 330;
-        this.swingSpeed = Math.random() * 0.03 + 0.01;
-        this.swingAngle = Math.random() * Math.PI * 2;
-      }
-
-      grow(multiplier) {
-        this.currentSize = this.baseSize * multiplier;
-      }
-
-      resetSize() {
-        this.currentSize = this.baseSize;
-      }
-
-      update() {
-        this.y -= this.speedY;
-        this.swingAngle += this.swingSpeed;
-        this.x += Math.sin(this.swingAngle) * 0.6 + this.speedX;
-
-        if (this.y < -this.currentSize * 2) {
-          this.reset();
+      function playAudio() {
+        if (bgMusic) {
+          bgMusic.play().then(() => {
+            console.log("Música reproduciéndose sin interrupciones.");
+          }).catch(err => {
+            console.log("Para escuchar la canción, recuerda tener el archivo musica.mp3 en tu repositorio.", err);
+          });
         }
       }
 
-      draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${this.opacity})`;
-        ctx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.5)`;
-        ctx.shadowBlur = 8;
-        
-        ctx.beginPath();
-        const size = this.currentSize;
-        const topCurveHeight = size * 0.3;
-        ctx.moveTo(0, topCurveHeight);
-        ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
-        ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
-        ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
-        ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+      if (startBtn) {
+        startBtn.addEventListener('click', () => {
+          playAudio();
+
+          if (welcomeScreen) {
+            welcomeScreen.style.opacity = '0';
+            welcomeScreen.style.visibility = 'hidden';
+          }
+          
+          setTimeout(() => {
+            if (mainContent) mainContent.classList.add('show');
+          }, 300);
+        });
       }
-    }
 
-    const hearts = [];
-    const heartCount = 65;
+      // Control de crecimiento extremo de corazones
+      let sizeMultiplier = 1;
+      const maxMultiplier = 25; // Tamaño colosal para cubrir toda la pantalla
 
-    for (let i = 0; i < heartCount; i++) {
-      hearts.push(new Heart(Math.random() * width, Math.random() * height));
-    }
+      function applyGrowth() {
+        sizeMultiplier += 5;
+        if (sizeMultiplier >= maxMultiplier) {
+          sizeMultiplier = maxMultiplier;
+          // Ocultar tarjeta y mostrar el botón superpuesto de reinicio
+          if (mainCard) mainCard.classList.add('hidden-by-hearts');
+          if (floatingResetBtn) floatingResetBtn.classList.add('visible');
+        }
+        hearts.forEach(heart => heart.grow(sizeMultiplier));
+      }
 
-    function animate() {
-      ctx.fillStyle = '#050508';
-      ctx.fillRect(0, 0, width, height);
+      function resetHearts() {
+        sizeMultiplier = 1;
+        if (mainCard) mainCard.classList.remove('hidden-by-hearts');
+        if (floatingResetBtn) floatingResetBtn.classList.remove('visible');
+        hearts.forEach(heart => heart.resetSize());
+      }
 
-      hearts.forEach(heart => {
-        heart.update();
-        heart.draw();
+      if (growHeartsBtn) growHeartsBtn.addEventListener('click', applyGrowth);
+      if (resetBtn) resetBtn.addEventListener('click', resetHearts);
+      if (floatingResetBtn) floatingResetBtn.addEventListener('click', resetHearts);
+
+      // Canvas & Animación de Corazones
+      const canvas = document.getElementById('heartCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
       });
 
-      requestAnimationFrame(animate);
-    }
+      class Heart {
+        constructor(customX, customY) {
+          this.baseSize = Math.random() * 20 + 12;
+          this.currentSize = this.baseSize;
+          this.reset(customX, customY);
+        }
 
-    animate();
+        reset(customX, customY) {
+          this.x = customX !== undefined ? customX : Math.random() * width;
+          this.y = customY !== undefined ? customY : height + 30 + Math.random() * 50;
+          this.speedY = Math.random() * 1.5 + 0.8;
+          this.speedX = (Math.random() - 0.5) * 0.8;
+          this.opacity = Math.random() * 0.7 + 0.3;
+          this.colorHue = Math.floor(Math.random() * 40) + 330;
+          this.swingSpeed = Math.random() * 0.03 + 0.01;
+          this.swingAngle = Math.random() * Math.PI * 2;
+        }
+
+        grow(multiplier) {
+          this.currentSize = this.baseSize * multiplier;
+        }
+
+        resetSize() {
+          this.currentSize = this.baseSize;
+        }
+
+        update() {
+          this.y -= this.speedY;
+          this.swingAngle += this.swingSpeed;
+          this.x += Math.sin(this.swingAngle) * 0.6 + this.speedX;
+
+          if (this.y < -this.currentSize * 2) {
+            this.reset();
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          
+          const dynamicOpacity = sizeMultiplier > 5 ? Math.min(1, this.opacity + 0.3) : this.opacity;
+          ctx.fillStyle = `hsla(${this.colorHue}, 85%, 65%, ${dynamicOpacity})`;
+          ctx.shadowColor = `hsla(${this.colorHue}, 90%, 65%, 0.6)`;
+          ctx.shadowBlur = sizeMultiplier > 5 ? 20 : 8;
+          
+          ctx.beginPath();
+          const size = this.currentSize;
+          const topCurveHeight = size * 0.3;
+          ctx.moveTo(0, topCurveHeight);
+          ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+          ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+          ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+          ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      const hearts = [];
+      const heartCount = 75;
+
+      for (let i = 0; i < heartCount; i++) {
+        hearts.push(new Heart(Math.random() * width, Math.random() * height));
+      }
+
+      function animate() {
+        ctx.fillStyle = '#050508';
+        ctx.fillRect(0, 0, width, height);
+
+        hearts.forEach(heart => {
+          heart.update();
+          heart.draw();
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    });
   </script>
 </body>
 </html>
